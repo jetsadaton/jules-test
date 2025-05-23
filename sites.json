@@ -1,0 +1,17 @@
+[
+  {
+    "name": "ExampleMangaSite1",
+    "baseUrl": "https://www.examplemangasite1.com",
+    "latestChapterUrlPath": "/manga/example-manga-one",
+    "episodeListSelector": ".chapter-list .episode",
+    "episodeLinkSelector": "a.episode-link",
+    "episodeTitleSelector": ".episode-title"
+  },
+  {
+    "name": "ExampleMangaSite2",
+    "baseUrl": "https://www.anothermangasite.org",
+    "latestChapterUrlPath": "/latest-updates",
+    "episodeListSelector": "#latest-chapters ul li",
+    "episodeLinkSelector": "a.chapter-url"
+  }
+]

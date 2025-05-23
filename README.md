@@ -1,3 +1,49 @@
+# Manga Web Scraper
+
+This project includes a web scraper designed to fetch the latest episode information from configured manga websites.
+
+## Features
+
+-   Loads manga site configurations from `sites.json`.
+-   Fetches HTML content from specified URLs.
+-   (Placeholder) Logic for extracting latest episode details (to be implemented with HTML parsing).
+-   Designed to be extensible for multiple manga websites.
+
+## Configuration
+
+To add or manage manga websites, edit the `sites.json` file in the root of the project. Each entry in the JSON array should follow the `MangaSite` interface structure defined in `src/types.ts`.
+
+Example entry in `sites.json`:
+
+```json
+{
+  "name": "ExampleMangaSite1",
+  "baseUrl": "https://www.examplemangasite1.com",
+  "latestChapterUrlPath": "/manga/example-manga-one",
+  "episodeListSelector": ".chapter-list .episode", 
+  "episodeLinkSelector": "a.episode-link",
+  "episodeTitleSelector": ".episode-title"
+}
+```
+
+-   `name`: A user-friendly name for the site.
+-   `baseUrl`: The base URL of the manga site.
+-   `latestChapterUrlPath`: The path from the `baseUrl` to the page where the latest chapters are listed.
+-   `episodeListSelector`: CSS selector to identify the list/container of episodes on the page.
+-   `episodeLinkSelector`: CSS selector to find the actual link (anchor tag `<a>`) of an episode within the list.
+-   `episodeTitleSelector` (optional): CSS selector to find the title of the episode if it's not directly the text content of the `episodeLinkSelector`.
+
+**Note:** The actual extraction logic using these selectors (e.g., with a library like Cheerio) is not yet fully implemented in `src/scraper.ts` (`extractLatestEpisode` function).
+
+## How it Works
+
+1.  The application starts by reading the site configurations from `sites.json`.
+2.  For each configured site, it constructs the full URL to the latest chapters page.
+3.  It fetches the HTML content of that page using `axios`.
+4.  The (currently placeholder) `extractLatestEpisode` function is called with the site's configuration and the fetched HTML. This function is intended to parse the HTML and identify the latest episode's title and URL using the CSS selectors defined in the site's configuration.
+5.  The results are logged to the console.
+
+---
 # Node.js TypeScript Starter Project
 
 This is a basic starter project for a Node.js backend application using TypeScript.
