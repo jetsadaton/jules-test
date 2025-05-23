@@ -35,8 +35,6 @@ Example entry in `sites.json`:
 
 **Important**: The accuracy and success of the scraper are highly dependent on the correctness of these CSS selectors for each site. They may need adjustment if a site's structure changes.
 
-**Note:** The actual extraction logic using these selectors (e.g., with a library like Cheerio) is not yet fully implemented in `src/scraper.ts` (`extractLatestEpisode` function).
-
 ## How it Works
 
 1.  The application starts by reading the site configurations from `sites.json`.
@@ -70,6 +68,52 @@ The web UI allows you to:
 -   **Delete a manga site:** Remove a site from the configuration.
 
 Changes made through the UI are saved directly to the `sites.json` file.
+
+## Automated Episode Checker & Telegram Notifications
+
+This project features an automated scheduler that periodically checks all configured manga sites for new episodes and sends notifications via a Telegram bot.
+
+**Purpose:** To keep you updated on the latest releases without manual checking.
+**Default Schedule:** The scheduler is set to run every 4 hours.
+
+### Environment Setup for Notifications
+
+To enable Telegram notifications, you need to set up environment variables:
+
+1.  **Create `.env` file:** In the root of the project, create a file named `.env`.
+2.  **Copy from example:** Copy the contents from `.env.example` into your new `.env` file.
+    ```
+    # .env.example content:
+    # TELEGRAM_BOT_TOKEN=YOUR_TOKEN_HERE
+    # TELEGRAM_CHAT_ID=YOUR_CHAT_ID_HERE
+    ```
+3.  **Fill in your credentials:**
+    *   `TELEGRAM_BOT_TOKEN`: Your unique Telegram Bot Token obtained from [BotFather](https://core.telegram.org/bots#botfather) on Telegram.
+    *   `TELEGRAM_CHAT_ID`: The ID of the chat (user, group, or channel) where the bot should send notifications. You can get this ID by interacting with your bot or using other Telegram tools.
+
+**Important Security Note:** The `.env` file contains sensitive credentials and **must not be committed to version control**. It is already listed in `.gitignore` to help prevent accidental commits.
+
+### Running the Scheduler
+
+To start the automated episode checking process:
+
+1.  Ensure dependencies are installed: `npm install`
+2.  Make sure your `.env` file is configured as described above.
+3.  Run the scheduler script:
+    ```bash
+    npm run start:scheduler
+    ```
+    The scheduler will then run in the background according to its schedule. Logs will be printed to the console.
+
+### Tracking Notifications: `lastNotifiedEpisodeUrl`
+
+Each site configuration in `sites.json` can have an optional field:
+-   `lastNotifiedEpisodeUrl` (string, optional): This field stores the URL of the most recent episode for which a notification has been successfully sent.
+
+The scheduler uses this field to:
+-   Determine if a newly found latest episode is actually "new" (i.e., different from the last one notified).
+-   Prevent sending duplicate notifications for the same episode.
+This field is managed automatically by the scheduler when a notification is sent. You typically do not need to edit it manually.
 
 ---
 # Node.js TypeScript Starter Project
@@ -125,5 +169,6 @@ In the `package.json` file, you will find the following scripts:
 -   `build`: Compiles the TypeScript code from `src/` to JavaScript in `dist/`.
 -   `start`: Runs the command-line scraper application from `dist/index.js`.
 -   `start:ui`: Starts the web UI for site management (compiles and then runs `dist/server.js`). Access it at `http://localhost:3000`.
+-   `start:scheduler`: Starts the automated episode checker and Telegram notification service (compiles and then runs `dist/scheduler.js`).
 -   `test`: (Default, currently does nothing) Placeholder for test execution scripts.
 ```

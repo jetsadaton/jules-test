@@ -16,4 +16,5 @@ export interface MangaSite {
   episodeLinkSelector: string;         // Selector for the anchor tag (<a>) of an episode within the list
   episodeTitleSelector?: string;       // Optional: Selector for the title if it's separate from the link text
                                        // If not provided, the link text itself will be used.
+  lastNotifiedEpisodeUrl?: string; // Stores the URL of the last episode that triggered a notification
 }

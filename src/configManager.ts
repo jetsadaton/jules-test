@@ -94,3 +94,15 @@ export async function deleteSite(name: string): Promise<void> {
 
   await writeSitesFile(filteredSites);
 }
+
+export async function updateSiteLastNotifiedUrl(siteName: string, episodeUrl: string): Promise<void> {
+  let sites = await readSitesFile(); // Assuming readSitesFile is an existing helper
+  const siteIndex = sites.findIndex(site => site.name === siteName);
+
+  if (siteIndex === -1) {
+    throw new Error(`Site with name "${siteName}" not found. Cannot update lastNotifiedEpisodeUrl.`);
+  }
+
+  sites[siteIndex].lastNotifiedEpisodeUrl = episodeUrl;
+  await writeSitesFile(sites); // Assuming writeSitesFile is an existing helper
+}
