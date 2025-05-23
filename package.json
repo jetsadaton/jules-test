@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/tsc",
-    "start": "node dist/index.js"
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:ui": "npm run build && node dist/server.js"
   },
   "repository": {
     "type": "git",
@@ -21,11 +22,15 @@
   "homepage": "https://github.com/jetsadaton/jules-test#readme",
   "devDependencies": {
     "@types/cheerio": "^1.0.0",
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.2",
     "@types/node": "^22.15.21",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "axios": "^1.9.0",
-    "cheerio": "^1.0.0"
+    "cheerio": "^1.0.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
   }
 }

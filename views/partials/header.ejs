@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= locals.title || 'Manga Site Manager' %></title>
+    <!-- Link to a stylesheet if you create one in public/css/style.css -->
+    <link rel="stylesheet" href="/css/style.css"> 
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        nav { margin-bottom: 20px; background-color: #333; padding: 10px; border-radius: 5px; }
+        nav a { color: white; margin-right: 15px; text-decoration: none; }
+        nav a:hover { text-decoration: underline; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 10px 12px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .actions a, .actions button { margin-right: 8px; padding: 6px 10px; text-decoration: none; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; }
+        .actions a.edit, .actions button.edit { background-color: #ffc107; color: #333; border-color: #ffc107;}
+        .actions a.delete, .actions button.delete { background-color: #dc3545; color: white; border-color: #dc3545;}
+        .actions form { display: inline; }
+        .button-link, .button { padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; border: none; cursor: pointer; display: inline-block; }
+        .button-link:hover, .button:hover { background-color: #0056b3; }
+        .form-container { background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .form-container label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-container input[type="text"], .form-container input[type="url"], .form-container textarea { width: calc(100% - 22px); padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; }
+        .form-container textarea { min-height: 80px; }
+        .form-container .button { background-color: #28a745; }
+        .form-container .button:hover { background-color: #1e7e34; }
+        .alert { padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Site List</a>
+        <a href="/new">Add New Site</a>
+    </nav>
+    <h1><%= locals.title || 'Manga Site Manager' %></h1>
+    <% if (locals.message && locals.message.text) { %>
+        <div class="alert alert-<%= locals.message.type || 'info' %>">
+            <%= locals.message.text %>
+        </div>
+    <% } %>
+```

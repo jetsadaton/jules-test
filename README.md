@@ -45,6 +45,32 @@ Example entry in `sites.json`:
 4.  The `extractLatestEpisode` function is called, which uses `cheerio` to parse the fetched HTML. It identifies the latest episode's title and URL using the CSS selectors defined in the site's configuration.
 5.  The results are logged to the console.
 
+## Web UI for Site Management
+
+This project includes a web-based user interface to manage the list of manga sites stored in `sites.json`.
+
+### Running the Web UI
+
+1.  Ensure all dependencies are installed:
+    ```bash
+    npm install
+    ```
+2.  Build the project and start the UI server:
+    ```bash
+    npm run start:ui
+    ```
+3.  Open your web browser and navigate to `http://localhost:3000` (or the port indicated in the console if 3000 is busy).
+
+### UI Features
+
+The web UI allows you to:
+-   **View all configured manga sites:** See a list of all sites currently in `sites.json`.
+-   **Add a new manga site:** Use a form to input all necessary details (name, base URL, selectors) for a new site.
+-   **Edit an existing manga site:** Modify the details of any previously configured site.
+-   **Delete a manga site:** Remove a site from the configuration.
+
+Changes made through the UI are saved directly to the `sites.json` file.
+
 ---
 # Node.js TypeScript Starter Project
 
@@ -97,6 +123,7 @@ This is a basic starter project for a Node.js backend application using TypeScri
 In the `package.json` file, you will find the following scripts:
 
 -   `build`: Compiles the TypeScript code from `src/` to JavaScript in `dist/`.
--   `start`: Runs the compiled application from `dist/index.js`.
+-   `start`: Runs the command-line scraper application from `dist/index.js`.
+-   `start:ui`: Starts the web UI for site management (compiles and then runs `dist/server.js`). Access it at `http://localhost:3000`.
 -   `test`: (Default, currently does nothing) Placeholder for test execution scripts.
 ```

@@ -1,0 +1,35 @@
+<%- include('partials/header', { title: 'Manga Sites' }) %>
+
+<% if (sites && sites.length > 0) { %>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Base URL</th>
+                <th>Latest Chapter Path</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% sites.forEach(site => { %>
+                <tr>
+                    <td><%= site.name %></td>
+                    <td><a href="<%= site.baseUrl %>" target="_blank"><%= site.baseUrl %></a></td>
+                    <td><%= site.latestChapterUrlPath %></td>
+                    <td class="actions">
+                        <a href="/edit/<%= encodeURIComponent(site.name) %>" class="edit">Edit</a>
+                        <form action="/delete/<%= encodeURIComponent(site.name) %>" method="POST" style="display: inline;">
+                            <button type="submit" class="delete" onclick="return confirm('Are you sure you want to delete <%= site.name %>?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+<% } else { %>
+    <p>No sites configured yet. <a href="/new">Add one!</a></p>
+<% } %>
+
+<a href="/new" class="button-link">Add New Site</a>
+
+<%- include('partials/footer') %>

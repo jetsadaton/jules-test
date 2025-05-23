@@ -1,0 +1,38 @@
+<%- include('partials/header', { title: (site ? 'Edit Site: ' + site.name : 'Add New Site') }) %>
+
+<div class="form-container">
+    <form action="<%= site ? '/update/' + encodeURIComponent(site.name) : '/add' %>" method="POST">
+        <input type="hidden" name="originalName" value="<%= site ? site.name : '' %>">
+        
+        <div>
+            <label for="name">Site Name:</label>
+            <input type="text" id="name" name="name" value="<%= site ? site.name : '' %>" required>
+        </div>
+        <div>
+            <label for="baseUrl">Base URL (e.g., https://www.example.com):</label>
+            <input type="url" id="baseUrl" name="baseUrl" value="<%= site ? site.baseUrl : '' %>" required>
+        </div>
+        <div>
+            <label for="latestChapterUrlPath">Latest Chapter URL Path (e.g., /manga/title):</label>
+            <input type="text" id="latestChapterUrlPath" name="latestChapterUrlPath" value="<%= site ? site.latestChapterUrlPath : '' %>" required>
+        </div>
+        <div>
+            <label for="episodeListSelector">Episode List Selector (CSS Selector):</label>
+            <input type="text" id="episodeListSelector" name="episodeListSelector" value="<%= site ? site.episodeListSelector : '' %>" required>
+        </div>
+        <div>
+            <label for="episodeLinkSelector">Episode Link Selector (CSS Selector within list item):</label>
+            <input type="text" id="episodeLinkSelector" name="episodeLinkSelector" value="<%= site ? site.episodeLinkSelector : '' %>" required>
+        </div>
+        <div>
+            <label for="episodeTitleSelector">Episode Title Selector (Optional, CSS Selector):</label>
+            <input type="text" id="episodeTitleSelector" name="episodeTitleSelector" value="<%= site && site.episodeTitleSelector ? site.episodeTitleSelector : '' %>">
+        </div>
+        
+        <button type="submit" class="button"><%= site ? 'Update Site' : 'Add Site' %></button>
+    </form>
+</div>
+
+<a href="/" class="button-link">Back to List</a>
+
+<%- include('partials/footer') %>
