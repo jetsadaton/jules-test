@@ -6,7 +6,7 @@ This project includes a web scraper designed to fetch the latest episode informa
 
 -   Loads manga site configurations from `sites.json`.
 -   Fetches HTML content from specified URLs.
--   (Placeholder) Logic for extracting latest episode details (to be implemented with HTML parsing).
+-   Extracts latest episode details using `cheerio` for HTML parsing (functional for correctly configured sites).
 -   Designed to be extensible for multiple manga websites.
 
 ## Configuration
@@ -33,6 +33,8 @@ Example entry in `sites.json`:
 -   `episodeLinkSelector`: CSS selector to find the actual link (anchor tag `<a>`) of an episode within the list.
 -   `episodeTitleSelector` (optional): CSS selector to find the title of the episode if it's not directly the text content of the `episodeLinkSelector`.
 
+**Important**: The accuracy and success of the scraper are highly dependent on the correctness of these CSS selectors for each site. They may need adjustment if a site's structure changes.
+
 **Note:** The actual extraction logic using these selectors (e.g., with a library like Cheerio) is not yet fully implemented in `src/scraper.ts` (`extractLatestEpisode` function).
 
 ## How it Works
@@ -40,7 +42,7 @@ Example entry in `sites.json`:
 1.  The application starts by reading the site configurations from `sites.json`.
 2.  For each configured site, it constructs the full URL to the latest chapters page.
 3.  It fetches the HTML content of that page using `axios`.
-4.  The (currently placeholder) `extractLatestEpisode` function is called with the site's configuration and the fetched HTML. This function is intended to parse the HTML and identify the latest episode's title and URL using the CSS selectors defined in the site's configuration.
+4.  The `extractLatestEpisode` function is called, which uses `cheerio` to parse the fetched HTML. It identifies the latest episode's title and URL using the CSS selectors defined in the site's configuration.
 5.  The results are logged to the console.
 
 ---

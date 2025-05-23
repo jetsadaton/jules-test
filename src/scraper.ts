@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as fs from 'fs/promises'; // Using fs.promises for async file operations
 import * as path from 'path';
+import * as cheerio from 'cheerio'; // Add this import
 import { MangaSite, EpisodeInfo } from './types';
 
 // Function to load manga site configurations from sites.json
@@ -40,25 +41,72 @@ export async function fetchWebsite(url: string): Promise<string | null> {
   }
 }
 
-// Placeholder function to extract the latest episode
-// This will be implemented properly later, likely using an HTML parsing library
 export function extractLatestEpisode(site: MangaSite, htmlContent: string): EpisodeInfo | null {
-  console.log(`Attempting to extract latest episode for ${site.name} from provided HTML content.`);
-  console.log(`Site uses episodeListSelector: '${site.episodeListSelector}' and episodeLinkSelector: '${site.episodeLinkSelector}'.`);
-  
-  // Placeholder: In a real implementation, you'd parse htmlContent here
-  // For now, let's return a dummy object or null
-  // This part will require an HTML parsing library like Cheerio and specific logic per site structure.
-  
-  // Dummy example based on the first site in sites.json structure (if selectors were real)
-  if (site.name === "ExampleMangaSite1" && htmlContent.includes("Some identifiable text for a new chapter")) {
+  try {
+    const $ = cheerio.load(htmlContent);
+
+    const listElement = $(site.episodeListSelector); // e.g., selects the <ul>
+    if (listElement.length === 0) {
+      console.warn(`[${site.name}] Episode list container not found using selector: ${site.episodeListSelector}`);
+      return null;
+    }
+
+    // Get the first child of the list container, assuming it's the latest episode item (e.g., first <li>)
+    const latestEpisodeItemElement = listElement.children().first(); 
+    if (latestEpisodeItemElement.length === 0) {
+      console.warn(`[${site.name}] No child items found within episode list container: ${site.episodeListSelector}`);
+      return null;
+    }
+
+    // Now find the link and title within this specific latestEpisodeItemElement
+    // Ensure we get the first link if multiple match, common if linkSelector is just "a"
+    const linkElement = latestEpisodeItemElement.find(site.episodeLinkSelector).first(); 
+    if (linkElement.length === 0) {
+      console.warn(`[${site.name}] Episode link not found using selector '${site.episodeLinkSelector}' within the latest episode item.`);
+      return null;
+    }
+
+    const relativeUrl = linkElement.attr('href');
+    if (!relativeUrl) {
+      console.warn(`[${site.name}] Episode link found, but it has no href attribute.`);
+      return null;
+    }
+
+    // Ensure the URL is absolute
+    // Corrected robust URL joining
+    const trimmedBaseUrl = site.baseUrl.endsWith('/') ? site.baseUrl.slice(0, -1) : site.baseUrl;
+    const trimmedRelativeUrl = relativeUrl.trim().startsWith('/') ? relativeUrl.trim().slice(1) : relativeUrl.trim();
+    const absoluteUrl = relativeUrl.trim().startsWith('http') ? relativeUrl.trim() : `${trimmedBaseUrl}/${trimmedRelativeUrl}`;
+    
+    let episodeTitleText: string | undefined;
+    if (site.episodeTitleSelector && site.episodeTitleSelector.trim() !== "") {
+      // If a specific title selector is given, try to find it within the latest episode item
+      const titleElement = latestEpisodeItemElement.find(site.episodeTitleSelector);
+      if (titleElement.length > 0) {
+        episodeTitleText = titleElement.first().text(); // Ensure we take text from the first matched title element
+      } else {
+         // Fallback to link text if title selector doesn't yield results
+        episodeTitleText = linkElement.text(); // linkElement is already .first()
+        console.warn(`[${site.name}] Episode title selector '${site.episodeTitleSelector}' did not find an element within the latest episode item. Falling back to link text.`);
+      }
+    } else {
+      // If no specific title selector, use the text of the link element itself
+      episodeTitleText = linkElement.text(); // linkElement is already .first()
+    }
+    
+    if (!episodeTitleText || episodeTitleText.trim() === "") {
+        console.warn(`[${site.name}] Episode title could not be extracted (link text was empty or title selector failed).`);
+        return null;
+    }
+
     return {
-      episodeTitle: "Chapter New (Dummy)",
-      url: `${site.baseUrl}${site.latestChapterUrlPath}/new-dummy-chapter`,
-      releaseDate: new Date().toISOString()
+      episodeTitle: episodeTitleText.trim(),
+      url: absoluteUrl.trim(),
+      // releaseDate could be parsed if available and a selector is defined for it
     };
+
+  } catch (error) {
+    console.error(`[${site.name}] Error during episode extraction:`, error);
+    return null;
   }
-  
-  console.warn(`Placeholder function: No actual parsing logic implemented for ${site.name}. You'll need to add HTML parsing (e.g., with Cheerio) and use the selectors from the site config.`);
-  return null;
 }

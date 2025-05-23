@@ -13,5 +13,13 @@
     "latestChapterUrlPath": "/latest-updates",
     "episodeListSelector": "#latest-chapters ul li",
     "episodeLinkSelector": "a.chapter-url"
+  },
+  {
+    "name": "ManhuaKey - Doomsday For All",
+    "baseUrl": "https://www.manhuakey.com",
+    "latestChapterUrlPath": "/manga/doomsday-for-all-me-virus-monarch/",
+    "episodeListSelector": "ul.version-chap",
+    "episodeLinkSelector": "a",
+    "episodeTitleSelector": ""
   }
 ]

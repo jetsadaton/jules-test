@@ -41,8 +41,7 @@ Processing site: ${site.name} (${site.baseUrl})`);
     }
   }
 
-  console.log("
-Manga Scraper finished.");
+  console.log("\nManga Scraper finished.");
 }
 
 main().catch(error => {
